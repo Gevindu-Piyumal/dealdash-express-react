@@ -4,6 +4,7 @@ const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 const vendorRoutes = require('./routes/vendors');
 const dealRoutes = require('./routes/deals');
+const categoryRoutes = require('./routes/categories');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -18,7 +19,7 @@ app.use(express.json());
 
 app.use('/vendors', vendorRoutes); // Mount the vendor routes on the /vendors path
 app.use('/deals', dealRoutes); // Mount the deal routes on the /deals path
-
+app.use('/categories', categoryRoutes); // Mount the category routes on the /categories path
 
 
 app.get('/', (req, res) => {
