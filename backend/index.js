@@ -3,6 +3,7 @@ const cors = require('cors');
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 const vendorRoutes = require('./routes/vendors');
+const dealRoutes = require('./routes/deals');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/vendors', vendorRoutes); // Mount the vendor routes on the /vendors path
+app.use('/deals', dealRoutes); // Mount the deal routes on the /deals path
 
 
 
