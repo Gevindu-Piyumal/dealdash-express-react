@@ -24,33 +24,6 @@ export default function Home() {
           </Button>
         </div>
       </div>
-      
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Dashboard cards */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h2 className="text-xl font-semibold mb-2">Categories</h2>
-          <p className="text-gray-600 mb-4">Organize deals by categories</p>
-          <Button onClick={() => router.push('/categories')} variant="secondary" className="w-full">
-            View Categories
-          </Button>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h2 className="text-xl font-semibold mb-2">Vendors</h2>
-          <p className="text-gray-600 mb-4">Manage vendors offering deals</p>
-          <Button onClick={() => router.push('/vendors')} variant="secondary" className="w-full">
-            View Vendors
-          </Button>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h2 className="text-xl font-semibold mb-2">Deals</h2>
-          <p className="text-gray-600 mb-4">Create and manage promotional deals</p>
-          <Button onClick={() => router.push('/deals')} variant="secondary" className="w-full">
-            View Deals
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
