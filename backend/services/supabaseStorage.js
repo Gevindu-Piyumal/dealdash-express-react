@@ -7,7 +7,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const VENDOR_BUCKET = 'vendor-images';
+const VENDOR_BUCKET = 'vendor-logos';
 const DEAL_BUCKET = 'deal-images';
 const CATEGORY_BUCKET = 'category-icons';
 
@@ -29,8 +29,7 @@ initBuckets().catch(console.error);
 
 // Generate unique filename for uploaded images
 const generateUniqueFileName = (originalName) => {
-  cons
-  t extension = path.extname(originalName);
+  const extension = path.extname(originalName);
   const timestamp = Date.now();
   const randomString = crypto.randomBytes(8).toString('hex');
   return `${timestamp}-${randomString}${extension}`;
