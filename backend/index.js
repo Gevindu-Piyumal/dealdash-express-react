@@ -1,32 +1,43 @@
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors'); 
-const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json');
-const vendorRoutes = require('./routes/vendors');
-const dealRoutes = require('./routes/deals');
-const categoryRoutes = require('./routes/categories');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const vendorRoutes = require('./routes/vendorRoutes');
+const dealRoutes = require('./routes/dealRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
 const app = express();
-const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/vendors', vendorRoutes); // Mount the vendor routes on the /vendors path
-app.use('/deals', dealRoutes); // Mount the deal routes on the /deals path
-app.use('/categories', categoryRoutes); // Mount the category routes on the /categories path
+// Connect to MongoDB
+mongoose.connect(process.env.MongoDBConnectionString)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
+const { scheduleExpirationChecks } = require('./services/dealService');
+scheduleExpirationChecks();
 
+// Routes
+app.use('/api/vendors', vendorRoutes);
+app.use('/api/deals', dealRoutes);
+app.use('/api/categories', categoryRoutes);
+
+// Root route
 app.get('/', (req, res) => {
-  res.send('Dealsdash API is running!');
+  res.send('DealDash API is running');
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
