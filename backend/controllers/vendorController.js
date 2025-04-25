@@ -170,16 +170,16 @@ exports.getNearbyVendors = async (req, res) => {
       return res.status(400).json({ message: 'Longitude and latitude are required' });
     }
 
-    // if a specific category is provided, find its ObjectId
+    // if a specific category is provided find its ObjectId
     let categoryFilter = {};
-    if (category !== 'All') {
+    if (category !== 'All' && category !== '') {
       const Category = mongoose.model('Category');
       const categoryDoc = await Category.findOne({ name: category });
-      
+
       if (!categoryDoc) {
         return res.status(404).json({ message: 'Category not found' });
       }
-      
+
       categoryFilter = { category: categoryDoc._id };
     }
 
@@ -199,11 +199,11 @@ exports.getNearbyVendors = async (req, res) => {
           localField: 'deals',
           foreignField: '_id',
           pipeline: [
-            { 
-              $match: { 
+            {
+              $match: {
                 isActive: true,
                 ...categoryFilter
-              } 
+              }
             },
             {
               $lookup: {
@@ -223,6 +223,7 @@ exports.getNearbyVendors = async (req, res) => {
           _id: 1,
           name: 1,
           logo: 1,
+          location: 1,
           distance: 1,
           activeDealCount: { $size: '$dealDetails' }
         }
@@ -239,7 +240,8 @@ exports.getNearbyVendors = async (req, res) => {
       name: vendor.name,
       logo: vendor.logo,
       activeDealCount: vendor.activeDealCount,
-      distance: Math.round(vendor.distance)
+      distance: Math.round(vendor.distance),
+      location: vendor.location
     }));
 
     res.status(200).json(results);
